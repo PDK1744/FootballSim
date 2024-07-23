@@ -20,6 +20,27 @@ MASCOTS = [
     "Mystic Bears"
 ]
 
+# Define position role
+POSITIONS = {
+  'offense': {
+    'QB': 1,
+    'RB': 1,
+    'TE': 1,
+    'WR': 3,
+    'OL': 5,
+  },
+  'defense': {
+    'DL': 4,
+    'LB': 2,
+    'CB': 3,
+    'S': 2,
+  },
+  'special_teams': {
+    'K': 1,
+    'P': 1,
+  }
+}
+
 
 class Team:
   def __init__(self, name):
@@ -48,8 +69,22 @@ def generate_teams(num_teams, num_players_per_team):
   for _ in range(num_teams):
       team_name = generate_random_team_name()
       team = Team(team_name)
-      for _ in range(num_players_per_team):
+    #Generate offense players
+      for position, count in POSITIONS['offense'].items():
+        for _ in range(count):
           player = generate_random_player()
           team.add_player(player)
+      #Generate defense players
+      for position, count in POSITIONS['defense'].items():
+        for _ in range(count):
+          player = generate_random_player()
+          team.add_player(player)
+
+      #Generate special teams
+      for position, count in POSITIONS['special_teams'].items():
+        for _ in range(count):
+            player = generate_random_player()
+            team.add_player(player)
+          
       teams.append(team)
   return teams

@@ -1,7 +1,7 @@
 from team import generate_teams
 
 def main():
-    teams = generate_teams(num_teams=4, num_players_per_team=11)
+    teams = generate_teams(num_teams=24, num_players_per_team=24)
     for team in teams:
         print(team)
         for player in team.roster:
