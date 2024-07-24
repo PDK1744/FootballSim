@@ -42,10 +42,12 @@ POSITIONS = {
 
 
 class Team:
-  def __init__(self, name):
+  def __init__(self, name, team_id=None):
+    self.id = team_id
     self.name = name
     self.roster = []
     self.power_level = 0
+    self.conference_id = None
 
   def add_player(self, player):
     self.roster.append(player)
@@ -59,7 +61,7 @@ class Team:
 
   def __str__(self):
     power_level = self.calculate_power_level()
-    return f"{self.name} with {len(self.roster)} players, Power Level: {power_level:.0f}"
+    return f"{self.name} | Power Level: {power_level:.0f} | Conference ID: {self.conference_id} | Players: {len(self.roster)}"
 
 def generate_random_team_name(length=8):
     city = fake.city()
@@ -92,6 +94,6 @@ def generate_teams(num_teams, num_players_per_team):
         for _ in range(count):
             player = generate_random_player(position)
             team.add_player(player)
-          
+      team.calculate_power_level()
       teams.append(team)
   return teams
