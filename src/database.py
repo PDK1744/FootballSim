@@ -30,7 +30,8 @@ def create_tables():
 
             c.execute('''CREATE TABLE IF NOT EXISTS teams (
                             id INTEGER PRIMARY KEY AUTOINCREMENT,
-                            name TEXT NOT NULL
+                            name TEXT NOT NULL,
+                            power_level INTEGER
                         )''')
             c.execute('''CREATE TABLE IF NOT EXISTS players (
                             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -81,8 +82,9 @@ def load_teams():
 
     teams = []
     for team_row in team_rows:
-        team_id, team_name = team_row
+        team_id, team_name, power_level = team_row
         team = Team(team_name)
+        team.power_level = power_level
 
         c.execute('SELECT * FROM players WHERE team_id = ?', (team_id,))
         player_rows = c.fetchall()
@@ -96,3 +98,35 @@ def load_teams():
 
     conn.close()
     return teams
+
+#VIEW Rosters
+def view_all_teams():
+    try:
+        conn = create_connection()
+        c = conn.cursor()
+
+        #Retrieve teams
+        c.execute('SELECT * FROM teams')
+        team_rows = c.fetchall()
+
+        for team_row in team_rows:
+            team_id, team_name, power_level = team_row
+            print(f"Team: {team_name} Powers: {power_level}")
+
+            #Retrieve players
+            c.execute('SELECT * FROM players WHERE team_id = ?', (team_id,))
+            player_rows = c.fetchall()
+
+            for player_row in player_rows:
+                _, name, position, skill_level, _ = player_row
+                print(f" Player: {name} Position: {position} Skill Level: {skill_level}")
+
+            print()
+
+        conn.close()
+    except Exception as e:
+        print(f"Error retrieving team rosters: {e}")
+        raise
+
+            
+    
