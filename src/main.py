@@ -1,12 +1,16 @@
 from team import generate_teams
-from database import save_teams, load_teams
+from database import save_teams, load_teams, create_tables
 
 def main():
     # Generate teams
-    teams = generate_teams(num_teams=24, num_players_per_team=24)
+    teams = generate_teams(num_teams=1, num_players_per_team=24)
 
-    # Save teams to the database
-    save_teams(teams)
+    # Check if the database needs to be created
+    if create_tables():  # Only create tables if the database does not already exist
+        print("Saving new teams to the database.")
+        save_teams(teams)
+    else:
+        print("Database already exists. No new teams will be saved.")
 
     # Load teams from the database
     loaded_teams = load_teams()

@@ -49,8 +49,16 @@ class Team:
   def add_player(self, player):
     self.roster.append(player)
 
+  def calculate_power_level(self):
+    if not self.roster:
+      return 0
+    total_skill_level = sum(player.skill_level for player in self.roster)
+    average_skill_level = total_skill_level / len(self.roster)
+    return average_skill_level
+
   def __str__(self):
-    return f"{self.name} with {len(self.roster)} players"
+    power_level = self.calculate_power_level()
+    return f"{self.name} with {len(self.roster)} players, Power Level: {power_level:.0f}"
 
 def generate_random_team_name(length=8):
     city = fake.city()

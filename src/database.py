@@ -4,32 +4,52 @@ from player import Player
 from team import Team
 
 def create_connection():
-    #Define path for database folder
-    db_folder = os.path.join('..', 'data')
-    db_path = os.path.join(db_folder, 'football_sim.db')
-
+    try:
     
-    conn = sqlite3.connect(db_path)
-    return conn
+        #Define path for database folder
+        db_folder = os.path.join('..', 'data')
+        db_path = os.path.join(db_folder, 'football_sim.db')
+        # Create folder if it doesn't exist
+        if not os.path.exists(db_folder):
+            os.makedirs(db_folder)
+    
+        
+        conn = sqlite3.connect(db_path)
+        return conn
+    except Exception as e:
+        print(f"Error creating connection to the database: {e}")
+        raise
 
 def create_tables():
-    conn = create_connection()
-    c = conn.cursor()
+    db_path = os.path.join('..', 'data', 'football_sim.db')
 
-    c.execute('''CREATE TABLE IF NOT EXISTS teams (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    name TEXT NOT NULL
-                )''')
-    c.execute('''CREATE TABLE IF NOT EXISTS players (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    name TEXT NOT NULL,
-                    position TEXT NOT NULL,
-                    skill_level INTEGER NOT NULL,
-                    team_id INTEGER,
-                    FOREIGN KEY (team_id) REFERENCES teams (id)
-                )''')
-    conn.commit()
-    conn.close()
+    if not os.path.exists(db_path):
+        try:
+            conn = create_connection()
+            c = conn.cursor()
+
+            c.execute('''CREATE TABLE IF NOT EXISTS teams (
+                            id INTEGER PRIMARY KEY AUTOINCREMENT,
+                            name TEXT NOT NULL
+                        )''')
+            c.execute('''CREATE TABLE IF NOT EXISTS players (
+                            id INTEGER PRIMARY KEY AUTOINCREMENT,
+                            name TEXT NOT NULL,
+                            position TEXT NOT NULL,
+                            skill_level INTEGER NOT NULL,
+                            team_id INTEGER,
+                            FOREIGN KEY (team_id) REFERENCES teams (id)
+                        )''')
+            conn.commit()
+            conn.close()
+            print("Database created and tables initialized.")
+            return True  # Indicate that the tables were created
+        except Exception as e:
+                print(f"Error creating tables: {e}")
+                raise
+    else:
+            print("Database already exists. Skipping table creation.")
+            return False  # Indicate that the tables were not created
 
 def save_team(team):
     conn = create_connection()
