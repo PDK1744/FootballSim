@@ -1,9 +1,15 @@
 import sqlite3
+import os
 from player import Player
 from team import Team
 
 def create_connection():
-    conn = sqlite3.connect('football_sim.db')
+    #Define path for database folder
+    db_folder = os.path.join('..', 'data')
+    db_path = os.path.join(db_folder, 'football_sim.db')
+
+    
+    conn = sqlite3.connect(db_path)
     return conn
 
 def create_tables():
