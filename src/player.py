@@ -5,4 +5,4 @@ class Player:
       self.skill_level = skill_level
 
   def __str__(self):
-      return f"{self.name} ({self.position}, Skill: {self.skill_level})"
+      return f"{self.name} ({self.position}, : {self.skill_level})"

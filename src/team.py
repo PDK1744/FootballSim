@@ -1,5 +1,4 @@
 import random
-import names
 from player import Player
 from faker import Faker
 
@@ -58,9 +57,8 @@ def generate_random_team_name(length=8):
     mascot = random.choice(MASCOTS)
     return f"{city} {mascot}"
 
-def generate_random_player():    
+def generate_random_player(position):    
     name = fake.name()
-    position = random.choice(['QB', 'RB', 'WR', 'TE', 'OL', 'DL', 'LB', 'CB', 'S', 'K', 'P'])
     skill_level = random.randint(50, 100)
     return Player(name, position, skill_level)
 
@@ -72,18 +70,18 @@ def generate_teams(num_teams, num_players_per_team):
     #Generate offense players
       for position, count in POSITIONS['offense'].items():
         for _ in range(count):
-          player = generate_random_player()
+          player = generate_random_player(position)
           team.add_player(player)
       #Generate defense players
       for position, count in POSITIONS['defense'].items():
         for _ in range(count):
-          player = generate_random_player()
+          player = generate_random_player(position)
           team.add_player(player)
 
       #Generate special teams
       for position, count in POSITIONS['special_teams'].items():
         for _ in range(count):
-            player = generate_random_player()
+            player = generate_random_player(position)
             team.add_player(player)
           
       teams.append(team)
